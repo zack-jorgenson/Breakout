@@ -78,6 +78,7 @@ public class Breakout extends GraphicsProgram {
                 paddle.setSize(50,10);
                 ball.floor=false;
                 ticksSincePowerUp=0;
+                pointsIncrement=10;
             }
             pause(5);
         }
@@ -149,6 +150,9 @@ public class Breakout extends GraphicsProgram {
                 } else if (brick.powerUp==5){
                     ball.floor = true;
                     ticksSincePowerUp=0;
+                } else if (brick.powerUp==6){
+                    ticksSincePowerUp=0;
+                    pointsIncrement=25;
                 }
             }
         }
