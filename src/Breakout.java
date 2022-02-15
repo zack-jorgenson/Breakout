@@ -18,6 +18,7 @@ public class Breakout extends GraphicsProgram {
     private int pointsIncrement = 10;
     private int tick = 0;
     private int ticksSincePowerUp = 0;
+    private int ticksSinceInvisible = 0;
     @Override
     public void init(){
         numBricksInRow = (int) (getWidth()/(Brick.WIDTH+5.0));
@@ -39,7 +40,6 @@ public class Breakout extends GraphicsProgram {
         }
         ball = new Ball(getWidth()/2, 350, 10, this.getGCanvas());
         add(ball);
-
         paddle = new Paddle(230, 430, 50 ,10);
         add(paddle);
     }
@@ -73,14 +73,27 @@ public class Breakout extends GraphicsProgram {
             }
             tick +=1;
             ticksSincePowerUp+=1;
+            ticksSinceInvisible+=1;
             if(ticksSincePowerUp > 500){
                 ball.setSize(10,10);
                 paddle.setSize(50,10);
                 ball.floor=false;
                 ticksSincePowerUp=0;
                 pointsIncrement=10;
-            }
+                ball.setFillColor(Color.BLACK);
+                }
             pause(5);
+            if(ticksSinceInvisible > 1500) {
+                for (int row = 0; row < 10; row++) {
+                    for (int col = 0; col < numBricksInRow; col++) {
+                        GObject o = this.getElementAt(10 + col * (Brick.WIDTH + 5), 4 * Brick.HEIGHT + row * (Brick.HEIGHT + 5));
+                        if (o instanceof Brick) {
+                            Brick b = (Brick) o;
+                            b.setVisible(true);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -132,10 +145,13 @@ public class Breakout extends GraphicsProgram {
                 if(brick.powerUp==2){
                     ball.setSize(20,20);
                     ticksSincePowerUp=0;
+                    System.out.println("Big Ball");
                 } else if (brick.powerUp==3){
                     paddle.setSize(paddle.getWidth()*2, paddle.getHeight());
                     ticksSincePowerUp=0;
+                    System.out.println("Big Paddle");
                 } else if (brick.powerUp==4){
+                    System.out.println("Bomb");
                     for(int i=0;i<10;i++){
                         int x = (int) (brick.getX()+brick.getWidth()/2+RandomGenerator.getInstance().nextInt(0,200)-100);
                         int y = (int) (brick.getY()+brick.getHeight()/2+RandomGenerator.getInstance().nextInt(0,200)-100);
@@ -148,11 +164,40 @@ public class Breakout extends GraphicsProgram {
                         }
                     }
                 } else if (brick.powerUp==5){
+                    System.out.println("Bouncy Floor");
                     ball.floor = true;
                     ticksSincePowerUp=0;
                 } else if (brick.powerUp==6){
+                    System.out.println("More Points");
                     ticksSincePowerUp=0;
                     pointsIncrement=25;
+                } else if (brick.powerUp==7){
+                    System.out.println("Extra Life");
+                    lives+=1;
+                    livesLabel.setLabel("LIVES: "+lives);
+                } else if (brick.powerUp==8){
+                    System.out.println("Small Ball");
+                    ticksSincePowerUp=0;
+                    ball.setSize(5,5);
+                } else if (brick.powerUp==9){
+                    System.out.println("Grey Ball");
+                    ticksSincePowerUp=0;
+                    ball.setFillColor(new Color(250,250,250));
+                } else if (brick.powerUp==10){
+                    System.out.println("Small Paddle");
+                    paddle.setSize(paddle.getWidth()/2, paddle.getHeight());
+                } else if (brick.powerUp==11){
+                    System.out.println("Invisible Bricks");
+                    for(int row = 0; row < 10; row++){
+                        for(int col = 0; col < numBricksInRow; col++) {
+                            GObject o=this.getElementAt(10+col*(Brick.WIDTH+5),4*Brick.HEIGHT+row*(Brick.HEIGHT+5));
+                            if(o instanceof Brick){
+                                Brick b = (Brick) o;
+                                b.setVisible(false);
+                            }
+                        }
+                    }
+                    ticksSinceInvisible=0;
                 }
             }
         }

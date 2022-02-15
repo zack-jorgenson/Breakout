@@ -10,7 +10,7 @@ public class Brick extends GRect {
         this.powerUp = powerUp;
         lives = (12-row)/2;
         this.setFillColor(color);
-        if(powerUp>=2&&powerUp<=5){
+        if(powerUp>=2&&powerUp<=11){
             lives = 1;
             this.setFillColor(Color.white);
         }
