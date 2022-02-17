@@ -81,6 +81,8 @@ public class Breakout extends GraphicsProgram {
                 ticksSincePowerUp=0;
                 pointsIncrement=10;
                 ball.setFillColor(Color.BLACK);
+                ball.setColor(Color.black);
+                paddle.setVisible(true);
                 }
             pause(5);
             if(ticksSinceInvisible > 1500) {
@@ -152,7 +154,7 @@ public class Breakout extends GraphicsProgram {
                     System.out.println("Big Paddle");
                 } else if (brick.powerUp==4){
                     System.out.println("Bomb");
-                    for(int i=0;i<10;i++){
+                    for(int i=0;i<20;i++){
                         int x = (int) (brick.getX()+brick.getWidth()/2+RandomGenerator.getInstance().nextInt(0,200)-100);
                         int y = (int) (brick.getY()+brick.getHeight()/2+RandomGenerator.getInstance().nextInt(0,200)-100);
                         GObject b = this.getElementAt(x,y);
@@ -160,6 +162,9 @@ public class Breakout extends GraphicsProgram {
                             Brick c = (Brick) b;
                             for(int j = 0; j < RandomGenerator.getInstance().nextInt(1,10);j++) {
                                 c.hit();
+                            }
+                            if(c.lives<=0){
+                                this.remove(c);
                             }
                         }
                     }
@@ -183,9 +188,11 @@ public class Breakout extends GraphicsProgram {
                     System.out.println("Grey Ball");
                     ticksSincePowerUp=0;
                     ball.setFillColor(new Color(250,250,250));
+                    ball.setColor(new Color(230,230,230));
                 } else if (brick.powerUp==10){
                     System.out.println("Small Paddle");
                     paddle.setSize(paddle.getWidth()/2, paddle.getHeight());
+                    ticksSincePowerUp=0;
                 } else if (brick.powerUp==11){
                     System.out.println("Invisible Bricks");
                     for(int row = 0; row < 10; row++){
@@ -198,6 +205,10 @@ public class Breakout extends GraphicsProgram {
                         }
                     }
                     ticksSinceInvisible=0;
+                } else if(brick.powerUp==12){
+                    System.out.println("Invisible Paddle");
+                    paddle.setVisible(false);
+                    ticksSincePowerUp=0;
                 }
             }
         }
